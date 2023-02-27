@@ -25,6 +25,10 @@ public class Scooter {
     }
 
     boolean scheduleForMaintenance(Position where) {
+        if (scooterData[0].equals("fast")) {
+            scheduleForMaintenance = true;
+            return scheduleForMaintenance;
+        }
         if (batteryLevel < 0.07) {
             scheduleForMaintenance = true;
         }
@@ -34,4 +38,29 @@ public class Scooter {
     String description() {
         return scooterId + " " + (String) scooterData[0];
     }
+}
+
+
+interface ScooterPrice {
+    float price(int minutes, boolean immediate);
+
+    boolean scheduleForMaintenance(Position position);
+}
+
+interface MaintenanceSchedule {
+
+    boolean scheduleForMaintenance(Position position);
+}
+
+interface Payer {
+
+    float charge(float price);
+
+    boolean isImmediate();
+}
+
+
+interface LoyaltyPoints {
+
+    int calculate(float price, int minutes);
 }
