@@ -41,26 +41,3 @@ public class Scooter {
 }
 
 
-interface ScooterPrice {
-    float price(int minutes, boolean immediate);
-
-    boolean scheduleForMaintenance(Position position);
-}
-
-interface MaintenanceSchedule {
-
-    boolean scheduleForMaintenance(Position position);
-}
-
-interface Payer {
-
-    float charge(float price);
-
-    boolean isImmediate();
-}
-
-
-interface LoyaltyPoints {
-
-    int calculate(float price, int minutes);
-}
