@@ -4,8 +4,11 @@ class ReturnScooterService {
         Scooter scooter = loadScooter(scooterId);
         Client client = loadClient(clientId);
 
-        float price = scooter.price(minutes, client);
-        float chargedAmount = client.charge(price, scooter);
+        float price = scooter.price(minutes);
+        float chargedAmount = client.charge(price, scooter.description());
+        if (client.isImmediate()) {
+            chargedAmount = price * 0.9f;
+        }
         chargeClient(clientId, chargedAmount);
         client.addLoyaltyPoints(minutes, chargedAmount);
         scooter.scheduleForMaintenance(where);

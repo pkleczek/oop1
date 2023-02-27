@@ -19,12 +19,12 @@ class Client {
         this.clientPriceMultiplier = clientPriceMultiplier;
     }
 
-    float charge(float price, Scooter scooter) {
+    float charge(float price, String description) {
         float chargeAmount = Math.max(price - clientCredit, 0);
         if (isImmediate) {
             this.immediateTransactionsCounter++;
         } else {
-            monthlyPaymentDescriptions.add(scooter.description());
+            monthlyPaymentDescriptions.add(description);
         }
         return chargeAmount;
     }
