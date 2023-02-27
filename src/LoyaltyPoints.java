@@ -1,4 +1,4 @@
 interface LoyaltyPoints {
 
-    int calculate(float price, int minutes);
+    int calculate(int minutes, float chargedAmount);
 }
