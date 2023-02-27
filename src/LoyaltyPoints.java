@@ -20,9 +20,6 @@ class IndividualAccount implements LoyaltyPoints {
     public int calculate(int minutes, float chargedAmount) {
         if (minutes > 15 && minutes < 50) {
             newLoyaltyPoints = 4;
-            if (payerType.equals("IMMEDIATE")) {
-                newLoyaltyPoints = 2;
-            }
         }
         if (minutes >= 50 && chargedAmount > 30) {
             newLoyaltyPoints = 20;

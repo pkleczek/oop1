@@ -19,12 +19,12 @@ class ReturnScooterService {
     }
 
     private Payer loadPayer(Long clientId) {
-        // |---partyId---|-----payer-----|---points---|
-        // |------1------|---immediate---|----flat----|
-        // |------2------|---immediate---|----flat----|
-        // |------3------|----monthly----|---group----|
-        // |------4------|----monthly----|---group----|
-        // |------------------------------------------|
+        // |---partyId---|-----payer-----|------points------------|
+        // |------1------|---immediate---|------individual(2)-----|
+        // |------2------|---immediate---|------individual(2)-----|
+        // |------3------|----monthly----|------individual(4)-----|
+        // |------4------|----monthly----|------group-------------|
+        // |------------------------------------------------------|
         //znajdz przypisanego do clientId Payera
         return null;
     }
