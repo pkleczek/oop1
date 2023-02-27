@@ -1,5 +1,5 @@
 interface ScooterPrice {
 
-    float price(int minutes, boolean immediate);
+    float price(int minutes);
 
 }
