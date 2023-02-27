@@ -7,9 +7,7 @@ class ReturnScooterService {
 
         float price = scooter.price(minutes);
         float chargedAmount = payer.charge(price, scooter.description());
-        if (payer.isImmediate()) {
-            chargedAmount = price * 0.9f;
-        }
+        chargedAmount = payer.applyDiscount(chargedAmount);
         chargePayer(clientId, chargedAmount);
         points.calculate(minutes, chargedAmount);
         scooter.scheduleForMaintenance(where);
@@ -27,6 +25,7 @@ class ReturnScooterService {
         //znajdz przypisany do clientId algorytm LoyaltyPoints
         return null;
     }
+
     private void chargePayer(Long payerId, float chargeAmount) {
         //obciążenie karty kredytowej (od razu lub po miesiącu)
     }

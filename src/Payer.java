@@ -3,8 +3,7 @@ import java.util.List;
 interface Payer {
 
     float charge(float price, String description);
-
-    boolean isImmediate();
+    float applyDiscount(float price);
 }
 
 
@@ -30,8 +29,8 @@ class Immediate implements Payer {
     }
 
     @Override
-    public boolean isImmediate() {
-        return true;
+    public float applyDiscount(float price) {
+        return 0.9f;
     }
 }
 
@@ -55,7 +54,7 @@ class MonthlyBilled implements Payer {
     }
 
     @Override
-    public boolean isImmediate() {
-        return false;
+    public float applyDiscount(float price) {
+        return 1f;
     }
 }
