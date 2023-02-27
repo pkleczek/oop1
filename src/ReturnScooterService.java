@@ -2,27 +2,33 @@ class ReturnScooterService {
 
     void returnScooter(Long clientId, Long scooterId, Position where, int minutes) {
         Scooter scooter = loadScooter(scooterId);
-        Client client = loadClient(clientId);
+        Payer payer = loadPayer(clientId);
+        LoyaltyPoints points = loadPoints(clientId);
 
         float price = scooter.price(minutes);
-        float chargedAmount = client.charge(price, scooter.description());
-        if (client.isImmediate()) {
+        float chargedAmount = payer.charge(price, scooter.description());
+        if (payer.isImmediate()) {
             chargedAmount = price * 0.9f;
         }
-        chargeClient(clientId, chargedAmount);
-        client.addLoyaltyPoints(minutes, chargedAmount);
+        chargePayer(clientId, chargedAmount);
+        points.calculate(minutes, chargedAmount);
         scooter.scheduleForMaintenance(where);
 
-        saveInDatabase(client, scooter);
+        saveInDatabase(payer, points, scooter);
     }
 
-    private Client loadClient(Long clientId) {
-        //ładowanie z bazy danych po clientId
+
+    private Payer loadPayer(Long clientId) {
+        //znajdz przypisanego do clientId Payera
         return null;
     }
 
-    private void chargeClient(Long clientId, float chargeAmount) {
-        //obciążenie karty kredytowej
+    private LoyaltyPoints loadPoints(Long clientId) {
+        //znajdz przypisany do clientId algorytm LoyaltyPoints
+        return null;
+    }
+    private void chargePayer(Long payerId, float chargeAmount) {
+        //obciążenie karty kredytowej (od razu lub po miesiącu)
     }
 
     private Scooter loadScooter(Long scooterId) {
@@ -30,7 +36,7 @@ class ReturnScooterService {
         return null;
     }
 
-    private void saveInDatabase(Client client, Scooter scooter) {
+    private void saveInDatabase(Payer payer, LoyaltyPoints points, Scooter scooter) {
         //zapis do bazy danych
     }
 
