@@ -8,19 +8,19 @@ class IndividualAccount implements LoyaltyPoints {
 
     private Long pointsAccountId;
     private int newLoyaltyPoints;
-    private String clientType;
+    private String payerType;
 
     IndividualAccount(int loyaltyPoints, String clientType, Long pointsAccountId) {
         this.pointsAccountId = pointsAccountId;
         this.newLoyaltyPoints = loyaltyPoints;
-        this.clientType = clientType;
+        this.payerType = clientType;
     }
 
     @Override
     public int calculate(int minutes, float chargedAmount) {
         if (minutes > 15 && minutes < 50) {
             newLoyaltyPoints = 4;
-            if (clientType.equals("IMMEDIATE")) {
+            if (payerType.equals("IMMEDIATE")) {
                 newLoyaltyPoints = 2;
             }
         }
