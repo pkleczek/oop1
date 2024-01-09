@@ -6,45 +6,57 @@ class ReturnScooterService {
         //(batteryLevel, Object[] scooterData, float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter)
         //kod celowo nie jest najpiękniejszy
 
-        float unlocking = 0.0f;
-        float pricePerMinute = 0.0f;
-        if (scooterData[0].equals("not_fast")) {
-            unlocking = (float) scooterData[1];
-            pricePerMinute = (float) scooterData[2];
-        } else {
-            unlocking = (float) scooterData[3];
-            pricePerMinute = (float) scooterData[4];
-        }
-
-        float chargeAmount;
-        float priceAmountClientMultiplicationFactor = 0.9f;
-        if (clientWithImmediatePayment) {
-            priceAmountClientMultiplicationFactor = 0.9f;
-        } else {
-            priceAmountClientMultiplicationFactor = 1;
-        }
-        float price = unlocking + pricePerMinute * minutes * priceAmountClientMultiplicationFactor;
-        chargeAmount = Math.max(price - clientCredit, 0);
-        chargeClient(clientId, chargeAmount);
-        boolean needsToChargeBattery = false;
+        Pricing pricing = getPricing(scooterData);
+        float priceFactor = priceFactor(clientWithImmediatePayment);
+        float price = pricing.unlocking() + pricing.pricePerMinute() * minutes * priceFactor;
+        float chargeAmount = Math.max(price - clientCredit, 0);
+        boolean needsToChargeBattery = batteryRechargeNeeded(batteryLevel);
+        int loyaltyPoints = getLoyaltyPoints(minutes, priceFactor, chargeAmount);
         if (clientWithImmediatePayment) {
             immediateTransactionsCounter++;
         }
-        if (batteryLevel < 0.07) {
-            needsToChargeBattery = true;
-        }
-        int loyaltyPoints = 0;
+
+        chargeClient(clientId, chargeAmount);
+        saveInDatabase(loyaltyPoints, chargeAmount, needsToChargeBattery, immediateTransactionsCounter);
+    }
+
+    private static int getLoyaltyPoints(int minutes, float priceFactor, float chargeAmount) {
         if (minutes > 15 && minutes < 50) {
-            loyaltyPoints = 4;
-            if (priceAmountClientMultiplicationFactor < 1) {
-                loyaltyPoints = 2;
+            if (priceFactor < 1) {
+                return 2;
+            } else {
+                return 4;
             }
         }
 
         if (minutes >= 50 && chargeAmount > 30) {
-            loyaltyPoints = 20;
+            return 20;
         }
-        saveInDatabase(loyaltyPoints, chargeAmount, needsToChargeBattery, immediateTransactionsCounter);
+
+        return 0;
+    }
+
+    private static boolean batteryRechargeNeeded(float batteryLevel) {
+        return batteryLevel < 0.07;
+    }
+
+    private static float priceFactor(boolean clientWithImmediatePayment) {
+        if (clientWithImmediatePayment) {
+            return 0.9f;
+        } else {
+            return 1;
+        }
+    }
+
+    private static Pricing getPricing(Object[] scooterData) {
+        if (scooterData[0].equals("not_fast")) {
+            return new Pricing((float) scooterData[1], (float) scooterData[2]);
+        } else {
+            return new Pricing((float) scooterData[3], (float) scooterData[4]);
+        }
+    }
+
+    private record Pricing(float unlocking, float pricePerMinute) {
     }
 
     private void saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, int immediateTransactionsCounter) {
