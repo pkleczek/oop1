@@ -1,6 +1,22 @@
 package oop1;
 
+interface DatabaseDelegate {
+    void saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, int immediateTransactionsCounter);
+}
+
+interface ChargeDelegate {
+    void chargeClient(Long clientId, float chargeAmount);
+}
+
 class ReturnScooterService {
+    private final DatabaseDelegate databaseDelegate;
+    private final ChargeDelegate chargeDelegate;
+
+    ReturnScooterService(DatabaseDelegate databaseDelegate, ChargeDelegate chargeDelegate) {
+        this.databaseDelegate = databaseDelegate;
+        this.chargeDelegate = chargeDelegate;
+    }
+
     void returnScooter(Long clientId, Long scooterId, Position where, int minutes, float batteryLevel, Object[] scooterData,
                        float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter) {
         //metoda returnScooter ma 4 parametry - clientId, scooterId, where, minutes
@@ -50,11 +66,11 @@ class ReturnScooterService {
     }
 
     private void saveInDatabase(int loyaltyPoints, float chargeAmount, boolean needsToChargeBattery, int immediateTransactionsCounter) {
-        //zapis wszystkigo do bazy danych
+        databaseDelegate.saveInDatabase(loyaltyPoints, chargeAmount, needsToChargeBattery, immediateTransactionsCounter);
     }
 
     private void chargeClient(Long clientId, float chargeAmount) {
-        //obciążenie karty kredytowej
+        chargeDelegate.chargeClient(clientId, chargeAmount);
     }
 
 }
