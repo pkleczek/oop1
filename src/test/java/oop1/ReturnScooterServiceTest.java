@@ -1,9 +1,7 @@
 package oop1;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -27,8 +25,8 @@ class ReturnScooterServiceTest {
 
         service.returnScooter(clientId, scooterId, position, rentDuration, batteryLevel, scooterData, clientCredit, clientWithImmediatePayment, immediateTransactionsCounter);
 
-        verify(databaseDelegate).saveInDatabase(anyInt(),anyFloat(), anyBoolean(), anyInt());
-        verify(chargeDelegate).chargeClient(anyLong(), anyFloat());
+        verify(databaseDelegate).saveInDatabase(20, 1530.0f, false, immediateTransactionsCounter + 1);
+        verify(chargeDelegate).chargeClient(clientId, 1530.0f);
     }
 
 }
