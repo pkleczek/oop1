@@ -1,3 +1,5 @@
+package oop1;
+
 class ReturnScooterService {
     void returnScooter(Long clientId, Long scooterId, Position where, int minutes, float batteryLevel, Object[] scooterData,
                        float clientCredit, boolean clientWithImmediatePayment, int immediateTransactionsCounter) {
